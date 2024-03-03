@@ -159,23 +159,23 @@ export async function getServerSideProps({ params }) {
         gravity: "north_west",
         y: "h + 10",
       },
-      {
-        color: "#24292F",
-        crop: "fit",
-        width: 432,
-        overlay: {
-          font_family: "Source Sans Pro",
-          font_size: 36,
-          font_weight: "regular",
-          text: user.bio,
-          crop: "fit",
-        },
-      },
-      {
-        flags: "layer_apply",
-        gravity: "north_west",
-        y: "h + 18",
-      },
+      // {
+      //   color: "#24292F",
+      //   crop: "fit",
+      //   width: 432,
+      //   overlay: {
+      //     font_family: "Source Sans Pro",
+      //     font_size: 36,
+      //     font_weight: "regular",
+      //     text: user.bio,
+      //     crop: "fit",
+      //   },
+      // },
+      // {
+      //   flags: "layer_apply",
+      //   gravity: "north_west",
+      //   y: "h + 18",
+      // },
       {
         color: "#24292F",
         crop: "fit",
