@@ -13,48 +13,24 @@ import images from "@data/images";
 import styles from "@styles/User.module.scss";
 
 export default function User({ user, ogImageUrl }) {
-  function handleOnTweet(event) {
-    event.preventDefault();
-    const url = `${window.location.origin}${window.location.pathname}`;
-    const message = `Check out ${user.login}'s GitHub profile! ${url}`;
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`,
-      "share-twitter",
-      "width=550, height=235"
-    );
-  }
+  const [downloadUrl, setDownloadUrl] = useState(null);
 
-  function shareOnWhatsApp() {
-    const url = encodeURIComponent(
-      `${window.location.origin}${window.location.pathname}`
-    );
-    const text = `Check out ${user.login}'s GitHub profile! ${url}`;
-    window.open(`https://wa.me/?text=${text}`);
-  }
+  async function handleOnDownload() {
+    try {
+      // Upload the transformed image to Cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(ogImageUrl, {
+        public_id: "transformed_image",
+        resource_type: "image",
+        type: "upload",
+        fetch_format: "auto",
+        quality: "auto",
+      });
 
-  function shareOnInstagram() {
-    const url = encodeURIComponent(ogImageUrl);
-    window.open(`instagram://library?AssetPath=${url}`);
-  }
-
-  function shareOnFacebook() {
-    const url = encodeURIComponent(
-      `${window.location.origin}${window.location.pathname}`
-    );
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      "_blank"
-    );
-  }
-
-  function shareOnLinkedIn() {
-    const url = encodeURIComponent(
-      `${window.location.origin}${window.location.pathname}`
-    );
-    window.open(
-      `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
-      "_blank"
-    );
+      // Set the download URL to the URL of the uploaded image
+      setDownloadUrl(uploadResponse.secure_url);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
   }
 
   return (
@@ -120,11 +96,14 @@ export default function User({ user, ogImageUrl }) {
         />
 
         <div>
-          <Button onClick={handleOnTweet}>Share on Twitter</Button>
-          <Button onClick={shareOnWhatsApp}>Share on WhatsApp</Button>
-          <Button onClick={shareOnInstagram}>Share on Instagram</Button>
-          <Button onClick={shareOnFacebook}>Share on Facebook</Button>
-          <Button onClick={shareOnLinkedIn}>Share on LinkedIn</Button>
+          <Button onClick={handleOnDownload}>Download Image</Button>
+          {downloadUrl && (
+            <div>
+              <a href={downloadUrl} download="profile_image.jpg">
+                Download Transformed Image
+              </a>
+            </div>
+          )}
         </div>
 
         <h2 className={styles.header}>Try Another Profile</h2>
@@ -146,6 +125,9 @@ export async function getServerSideProps({ params }) {
 
   cloudinary.config({
     cloud_name: "dcijnycwn",
+    api_key: "157937658118738",
+    api_secret: "KineJAztVYvQ9m5PWb8hOTLwco0",
+    secure: true,
   });
 
   const cloudinaryUrl = cloudinary.url("hrsvctkdjoskq4yz5cnj", {
@@ -216,6 +198,11 @@ export async function getServerSideProps({ params }) {
         gravity: "north_west",
         x: 106,
         y: 80,
+      },
+      // Specify format and attachment for download
+      {
+        fetch_format: "auto",
+        fl_attachment: "filename.jpg",
       },
     ],
   });
