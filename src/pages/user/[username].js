@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,16 +13,6 @@ import images from "@data/images";
 import styles from "@styles/User.module.scss";
 
 export default function User({ user, ogImageUrl }) {
-  const canvasRef = useRef(null);
-
-  function handleDownloadImage() {
-    const canvas = canvasRef.current;
-    const link = document.createElement("a");
-    link.download = "customized-profile-image.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  }
-
   function handleOnTweet(event) {
     event.preventDefault();
     const url = `${window.location.origin}${window.location.pathname}`;
@@ -33,24 +23,6 @@ export default function User({ user, ogImageUrl }) {
       "width=550, height=235"
     );
   }
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, 700, 1102); // Draw the image
-      ctx.font = "bold 40px Arial";
-      ctx.fillStyle = "black";
-      ctx.fillText(user.name, 20, 50); // Draw user name
-      ctx.font = "20px Arial";
-      ctx.fillStyle = "black";
-      ctx.fillText(`@${user.login}`, 20, 90); // Draw user login
-    };
-    img.src = ogImageUrl;
-  }, [ogImageUrl]);
-
   return (
     <Layout>
       <Head>
@@ -109,15 +81,11 @@ export default function User({ user, ogImageUrl }) {
           width="700"
           height="1102"
           src={ogImageUrl}
-          style={{ border: "solid 2px blueviolet", display: "none" }}
+          style={{ border: "solid 2px blueviolet" }}
           alt="Social Card Preview"
-          ref={canvasRef}
         />
 
         <p>
-          <Button onClick={handleDownloadImage}>
-            Download Customized Image
-          </Button>
           <Button onClick={handleOnTweet}>Share on Twitter</Button>
         </p>
 
