@@ -23,6 +23,40 @@ export default function User({ user, ogImageUrl }) {
       "width=550, height=235"
     );
   }
+
+  function shareOnWhatsApp() {
+    const url = encodeURIComponent(
+      `${window.location.origin}${window.location.pathname}`
+    );
+    const text = `Check out ${user.login}'s GitHub profile! ${url}`;
+    window.open(`https://wa.me/?text=${text}`);
+  }
+
+  function shareOnInstagram() {
+    const url = encodeURIComponent(ogImageUrl);
+    window.open(`instagram://library?AssetPath=${url}`);
+  }
+
+  function shareOnFacebook() {
+    const url = encodeURIComponent(
+      `${window.location.origin}${window.location.pathname}`
+    );
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      "_blank"
+    );
+  }
+
+  function shareOnLinkedIn() {
+    const url = encodeURIComponent(
+      `${window.location.origin}${window.location.pathname}`
+    );
+    window.open(
+      `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
+      "_blank"
+    );
+  }
+
   return (
     <Layout>
       <Head>
@@ -85,9 +119,13 @@ export default function User({ user, ogImageUrl }) {
           alt="Social Card Preview"
         />
 
-        <p>
+        <div>
           <Button onClick={handleOnTweet}>Share on Twitter</Button>
-        </p>
+          <Button onClick={shareOnWhatsApp}>Share on WhatsApp</Button>
+          <Button onClick={shareOnInstagram}>Share on Instagram</Button>
+          <Button onClick={shareOnFacebook}>Share on Facebook</Button>
+          <Button onClick={shareOnLinkedIn}>Share on LinkedIn</Button>
+        </div>
 
         <h2 className={styles.header}>Try Another Profile</h2>
 
@@ -127,10 +165,7 @@ export async function getServerSideProps({ params }) {
         flags: "layer_apply",
         width: 300,
         height: 300,
-        // gravity: "north_west",
-        // x: 150,
         y: -220,
-        // radius: 250,
       },
       {
         color: "#4D57F6",
@@ -159,23 +194,6 @@ export async function getServerSideProps({ params }) {
         gravity: "north_west",
         y: "h + 10",
       },
-      // {
-      //   color: "#24292F",
-      //   crop: "fit",
-      //   width: 432,
-      //   overlay: {
-      //     font_family: "Source Sans Pro",
-      //     font_size: 36,
-      //     font_weight: "regular",
-      //     text: user.bio,
-      //     crop: "fit",
-      //   },
-      // },
-      // {
-      //   flags: "layer_apply",
-      //   gravity: "north_west",
-      //   y: "h + 18",
-      // },
       {
         color: "#24292F",
         crop: "fit",
