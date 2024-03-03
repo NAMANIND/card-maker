@@ -110,7 +110,7 @@ export async function getServerSideProps({ params }) {
     cloud_name: "dcijnycwn",
   });
 
-  const cloudinaryUrl = cloudinary.url("hrsvctkdjoskq4yz5cnj.jpg", {
+  const cloudinaryUrl = cloudinary.url("hrsvctkdjoskq4yz5cnj", {
     width: 700,
     height: 1102,
     transformation: [
